@@ -2,10 +2,10 @@
 
 ## Requirements
 
-- Python 3.8+
-- Docker and Docker Compose
-- Go
-- Make
+- **Python 3.8+** — https://www.python.org/downloads/
+- **Docker and Docker Compose** — https://www.docker.com/get-started
+- **Go** — https://go.dev/dl/
+- **Make** — on Windows, install via Scoop: `scoop install make` (install Scoop first: `irm get.scoop.sh | iex`)
 
 Install Python dependencies:
 ```bash
