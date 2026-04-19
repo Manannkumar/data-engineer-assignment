@@ -1,4 +1,4 @@
-# SQS Data Pipeline — Documentation
+# SQS Data Pipeline Documentation
 
 ## Requirements
 
