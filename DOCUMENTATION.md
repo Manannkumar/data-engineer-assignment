@@ -36,7 +36,7 @@ Run the full pipeline with one command:
 make all
 ```
 
-This runs everything in order — starts Docker, pushes test messages, runs the ETL, and shows the results.
+This runs everything in order, starts Docker, pushes test messages, runs the ETL, and shows the results.
 
 To run steps individually:
 
@@ -57,8 +57,8 @@ Connects to LocalStack SQS using boto3 and reads messages in batches until the q
 
 **Transform**
 Two message formats are handled:
-- `route` format — has a list of legs with `from`, `to`, `duration`, and `started_at` (string `DD/MM/YYYY HH:MM:SS`). Departure is the first leg's origin, destination is the last leg's destination, end time is calculated by adding duration to the last leg's start time.
-- `locations` format — has a list of entries with `location` and `timestamp` (Unix epoch). Departure is the first location, destination is the last.
+- `route` format : has a list of legs with `from`, `to`, `duration`, and `started_at` (string `DD/MM/YYYY HH:MM:SS`). Departure is the first leg's origin, destination is the last leg's destination, end time is calculated by adding duration to the last leg's start time.
+- `locations` format : has a list of entries with `location` and `timestamp` (Unix epoch). Departure is the first location, destination is the last.
 
 Malformed messages (invalid JSON) are skipped and logged.
 
@@ -72,7 +72,7 @@ A message is deleted from SQS only after it is successfully saved to the databas
 
 ## Language Choice
 
-Python. It has straightforward libraries for everything needed here — boto3 for SQS, SQLAlchemy for the database, and psycopg2 for PostgreSQL. The code is easy to read and modify.
+Python. It has straightforward libraries for everything needed here boto3 for SQS, SQLAlchemy for the database, and psycopg2 for PostgreSQL. The code is easy to read and modify.
 
 ---
 
@@ -99,20 +99,20 @@ PostgreSQL was chosen over SQLite because it is production-grade, supports upser
 
 ## Challenges
 
-**LocalStack version** — the latest image requires a paid license. Fixed by pinning to version 3.8 in docker-compose.yml.
+**LocalStack version** : the latest image requires a paid license. Fixed by pinning to version 3.8 in docker-compose.yml.
 
-**Two different date formats** — route messages use a human-readable string, location messages use Unix epoch. Both are parsed into Python datetime objects before storing.
+**Two different date formats** : route messages use a human-readable string, location messages use Unix epoch. Both are parsed into Python datetime objects before storing.
 
-**Duplicate messages** — two messages in the queue had the same `id`. Handled with upsert so only one row exists per id.
+**Duplicate messages** : two messages in the queue had the same `id`. Handled with upsert so only one row exists per id.
 
 ---
 
 ## Known Limitations
 
-**No Dead Letter Queue (DLQ)** — if a message keeps failing on every retry, it will block that message indefinitely. In production, a DLQ should be configured so that after a set number of failures SQS automatically moves the message out of the main queue. The pipeline can then continue and the failed message is preserved for debugging.
+**No Dead Letter Queue (DLQ)** : if a message keeps failing on every retry, it will block that message indefinitely. In production, a DLQ should be configured so that after a set number of failures SQS automatically moves the message out of the main queue. The pipeline can then continue and the failed message is preserved for debugging.
 
-**No timezone handling** — dates are stored as TIMESTAMP without timezone info. In production, UTC should be enforced explicitly.
+**No timezone handling** : dates are stored as TIMESTAMP without timezone info. In production, UTC should be enforced explicitly.
 
-**Hardcoded AWS credentials in etl.py** — fine for LocalStack but in production these should come from environment variables or AWS IAM roles, never hardcoded.
+**Hardcoded AWS credentials in etl.py** : fine for LocalStack but in production these should come from environment variables or AWS IAM roles, never hardcoded.
 
-**print() instead of proper logging** — works for this use case but in production a logging framework with log levels (INFO, ERROR) would make monitoring much easier.
+**print() instead of proper logging** : works for this use case but in production a logging framework with log levels (INFO, ERROR) would make monitoring much easier.
