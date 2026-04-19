@@ -16,7 +16,7 @@ pip install boto3 sqlalchemy psycopg2-binary
 
 ## Environment Setup
 
-The project uses a `.env` file for AWS credentials. LocalStack accepts any dummy values:
+Create a `.env` file in the project root with the following content. LocalStack accepts any dummy values:
 
 ```
 AWS_ACCESS_KEY_ID=test
@@ -24,7 +24,7 @@ AWS_SECRET_ACCESS_KEY=test
 AWS_DEFAULT_REGION=ap-south-1
 ```
 
-The Makefile loads this automatically so credentials never need to be set manually.
+The Makefile loads this file automatically so credentials never need to be set manually.
 
 ---
 
